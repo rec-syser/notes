@@ -1,14 +1,7 @@
-# 算法与数据结构
-
-## 排序
-
-### 快速排序
-
-快速排序的递归实现参考算法导论的讲解，在其基础上理解非递归时间较为容易
-
-#### 递归实现
-
-```python
+"""
+快速排序：递归形式、非递归形式
+"""
+# 递归形式
 def quicksort(a, p, r):
     if p < r:
         q = partition1(a, p, r)
@@ -35,27 +28,28 @@ def partition2(a, p, r):
             i = i + 1
             a[i], a[j] = a[j], a[i]
     return i 
-```
 
 
-
-#### 非递归实现
-
-```python
-def quicksortUnRecur(nums, beg, end):
-    if beg >= end:
-        return nums
-    stack = [beg, end]
+# 非递归形式
+def quicksort_unrec(a, s, e):
+    if s >= e:
+        return
+    stack = [s, e]
     while stack:
-        beg, end = stack.pop(0), stack.pop(0)
-        if beg >= end:
+        s, e = stack.pop(0), stack.pop(0)
+        if s >= e:
             continue
-        i, pivot = beg-1, nums[end]
-        for j in range(beg, end+1):
-            if nums[j] <= pivot:
-                i += 1
-                nums[i], nums[j] = nums[j], nums[i]
-        stack.extend([beg, i-1, i+1, end])
-    return nums
-```
+        i, x = s-1, a[e] # 和partition 的操作类似
+        for j in range(s, e+1):
+            if a[j] <= x:
+                i = i + 1
+                a[i], a[j] = a[j], a[i]
+        stack.extend([s, i-1, i+1, e])
+    return a
 
+
+if __name__ == "__main__":
+    a = [1, 5, 7, 2, 3, 6, 4]
+    # quicksort(a, 0, len(a)-1)
+    quicksort_unrec(a, 0, len(a)-1)
+    print(a)
