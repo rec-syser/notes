@@ -1,3 +1,7 @@
+## 基础概念
+
+1. 引用类型没有赋值默认为null
+
 ## 注解 Annotation
 
 ### 什么是注解 、注解的作用 、在哪里使用注解
@@ -105,3 +109,14 @@
 <img src="java_record.assets/image-20200830110727045.png" alt="image-20200830110727045" style="zoom:67%;" />
 
 <img src="java_record.assets/image-20200830111231868.png" alt="image-20200830111231868" style="zoom:67%;" />
+
+## java集合
+
+### java集合集成结构
+
+![img](java_record.assets/5d40104c1842d26873.jpg)
+
+### ArrayList
+
+### HashMAp
+
