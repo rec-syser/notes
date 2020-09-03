@@ -49,7 +49,67 @@
 4. 工作内存是cpu缓存的抽象
 5. 这种抽象是为了屏蔽底层的操作系统的不同，实现兼容
 
+#### java 八大内存交互操作
+
+![image-20200902191521365](java_concurrency.assets/image-20200902191521365.png)
+
+![image-20200902223828617](java_concurrency.assets/image-20200902223828617.png)
+
+![image-20200902224107648](java_concurrency.assets/image-20200902224107648.png)
+
+1. 八大操作是顺序执行的，但是没有必要是连续执行的
+2. read和load是一起执行的，store和write的连续执行的
+
+
+
+#### volatile 关键字 内存可见性
+
+1. 加上volatile关键字之后 可以 实现类似缓存一致性的嗅探操作，实现变量的同步更改
+
+2. 没有实现原子性，所以下面的代码还是无法保证多线程结果的准确。因为Volatile实现了内存的可见性，当一个线程最先改变变量的时候，变量状态变为（M），此时其他线程已经执行的++操作导致的变量结果的改变会变成无效的缓存，导致部分循环操作无效。
+
+   ```java
+   public class VolatileAtomicSample {
+   
+       private static volatile int counter = 0;
+   
+       public static void main(String[] args) {
+           for (int i = 0; i < 10; i++) {
+               Thread thread = new Thread(()->{
+                   for (int j = 0; j < 1000; j++) {
+                       counter++; //不是一个原子操作,第一轮循环结果是没有刷入主存，这一轮循环已经无效
+                       //1 load counter 到工作内存
+                       //2 add counter 执行自加
+                       //其他的代码段？
+                   }
+               });
+               thread.start();
+           }
+   
+           try {
+               Thread.sleep(1000);
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+   
+           System.out.println(counter); #输出的结果小于等于 10000
+       }
+   
+   }
+   ```
+
+3. 指令重排
+
+4. 内存屏障
+
+![image-20200902223014440](java_concurrency.assets/image-20200902223014440.png)
+
+![image-20200902234829960](java_concurrency.assets/image-20200902234829960.png)
+
 #### 问题
 
-1. 既然CPU有MESI缓存一致性协议，为什么JMM还需要volatile 关键字？https://juejin.im/post/6847902216255356936 没有详细看完
-
+1. 既然CPU有MESI缓存一致性协议，为什么JMM还需要volatile 关键字？
+   1. 首先MESI的为了保证存在多级缓存的多核cpu或者多个cpu之间共享变量的一致性，（不能保证所有情况，还需要其他操作来继进行，针对不同的操作系统和架构有不同的解决方案），但是volatile关键字是高级语言给开发者提供的用来保证多个线程共享变量之间的可见性，屏蔽了底层操作系统的不同实现。
+   2. 在JVM和底层操作系统系统进行交互式会将volatile关键字进行指令编译来达到开发者想要实现的目的。
+2. java内存模型抽象了不同系统的内存缓存机制，但是本事java的字节码还是需要编译为一个个指令交由操作系统执行，在这期间社怎么将java内存模型达到的缓存一致性通知给操作系统呢？
+3. 指令重排是在什么情况下进行的：程序编译的时候进行，程序执行过程中遇到等待操作时进行？ 
