@@ -6,6 +6,37 @@
 
 <img src="java_record.assets/image-20200904094129489.png" alt="image-20200904094129489" style="zoom:80%;" />
 
+### 枚举类型 Enum
+
+```java
+public enum Size {
+    SMALL("S", 1), MEDIUM("M", 2), LARGE("L", 3), EXTRA_LARGE("XL", 4); //这里相当于四个Size枚举类型的实例
+
+    private String abbrevation;
+    private int index;
+    private Size(String abbrevation, int index){
+        this.index = index;
+        this.abbrevation = abbrevation;
+    }
+
+    public String getAbbrevation() {
+        return abbrevation;
+    }
+
+    public void setAbbrevation(String abbrevation) {
+        this.abbrevation = abbrevation;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+}
+```
+
 ## 注解 Annotation
 
 ### 什么是注解 、注解的作用 、在哪里使用注解
@@ -140,17 +171,25 @@
 
 ### Vector
 
+1. Vector是线程安全的
+
 ### ArrayList
 
 1. 为什么需要ArrayList，原生数组有什么缺点。
 2. ArrayList和LinkedList的区别
 3. ArrayList中elementData为什么被transient修饰？
    1. ArrayList在序列化的时候会调用writeObject，直接将size和element写入ObjectOutputStream；反序列化时调用readObject，从ObjectInputStream获取size和element，再恢复到elementData。
-   2. 为什么不直接用elementData来序列化，而采用上诉的方式来实现序列化呢？原因在于elementData是一个缓存数组，它通常会预留一些容量，等容量不足时再扩充容量，那么有些空间可能就没有实际存储元素，采用上诉的方式来实现序列化时，就可以保证只序列化实际存储的那些元素，而不是整个数组，从而节省空间和时间。
+   2. 为什么不直接用elementData来序列化，而采用上诉的方式来实现序列化呢？原因在于elementData是一个缓存数组，它通常会预留一些容量，等容量不足时再扩充容量，那么有些空间可能就没有实际存储元素，采用上诉的方式来实现序列化时，就可以保证只序列化实际存储的那些元素，而不是整个数组，从而节省空间和时间
+   
+4. 底层实现
 
 ### LinkedList
 
 1. 是双向链表
+
+### ArrayDeque
+
+1. 集成了List和Deque接口，是一个双端队列，可以用来实现栈和队列的操作，底层是一个循环数组。
 
 ### HashMAp
 
