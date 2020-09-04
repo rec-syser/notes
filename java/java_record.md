@@ -112,11 +112,39 @@
 
 ## java集合
 
+1. 会使用集合存储数据
+2. 会便利集合，把数据取出来
+3. 掌握每种集合的特性
+
 ### java集合集成结构
 
 ![img](java_record.assets/5d40104c1842d26873.jpg)
 
+### Collection接口常用功能
+
+![image-20200903222343777](java_record.assets/image-20200903222343777.png)
+
+### Itreator  接口功能
+
+![image-20200903224702587](java_record.assets/image-20200903224702587.png)
+
+1. 迭代器的remove操作需要在next之后进行，即删除上一个访问的元素
+
+### java库中的具体集合
+
+![image-20200903225357296](java_record.assets/image-20200903225357296.png)
+
+### Vector
+
 ### ArrayList
 
+### LinkedList
+
+1. 是双向链表
+
 ### HashMAp
+
+## lambda 表达式
+
+
 
