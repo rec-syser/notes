@@ -62,7 +62,7 @@
 
 
 
-#### volatile 关键字 内存可见性
+#### volatile 关键字 内存可见性 有序性
 
 1. 加上volatile关键字之后 可以 实现类似缓存一致性的嗅探操作，实现变量的同步更改
 
@@ -98,18 +98,109 @@
    }
    ```
 
-3. 指令重排
-
-4. 内存屏障
 
 ![image-20200902223014440](java_concurrency.assets/image-20200902223014440.png)
 
 ![image-20200902234829960](java_concurrency.assets/image-20200902234829960.png)
+
+#### 指令重排
+
+```java
+public class VolatileReOrderSample {
+    private static int x = 0, y = 0;
+    private static int a = 0, b =0;
+    static Object object = new Object();
+
+    public static void main(String[] args) throws InterruptedException {
+        int i = 0;
+
+        for (;;){
+            i++;
+            x = 0; y = 0;
+            a = 0; b = 0;
+            Thread t1 = new Thread(new Runnable() {
+                public void run() {
+                    //由于线程one先启动，下面这句话让它等一等线程two. 读着可根据自己电脑的实际性能适当调整等待时间.
+                    shortWait(10000);
+                    a = 1; 
+                    x = b; 
+                }
+            });
+            Thread t2 = new Thread(new Runnable() {
+                public void run() {
+                    b = 1;
+                    y = a;
+                }
+            });
+            t1.start();
+            t2.start();
+            t1.join();
+            t2.join();
+
+            /**
+             * cpu或者jit对我们的代码进行了指令重排？
+             * 1,1
+             * 0,1
+             * 1,0
+             * 0,0 cpu或者JIT对代码进行了指令重排
+             */
+            String result = "第" + i + "次 (" + x + "," + y + "）";
+            if(x == 0 && y == 0) {
+                System.err.println(result);
+                break;
+            } else {
+                System.out.println(result);
+            }
+        }
+
+    }
+```
+
+1. 为什么会进行指令重排？
+2. 指令重排发生在哪个阶段？
+   1. 发生在JIT及时编译阶段
+   2. cpu在执行汇编指令的时候也会发生指令重排
+3. 怎么避免发生指令重排：
+   1. volatile关键字 可以在编译阶段增加内存屏障 禁止指令重排
+   2. 直接使用内存屏障
+4. 单列情况
+
+```
+public class Singleton {
+
+    /**
+     * 查看汇编指令
+     * -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly -Xcomp
+     */
+    private volatile static Singleton myinstance;
+
+    public static Singleton getInstance() {
+        if (myinstance == null) {
+            synchronized (Singleton.class) {
+                if (myinstance == null) {
+                    myinstance = new Singleton();//对象创建过程，本质可以分文三步 没有原子性
+                    //申请地址空间
+                    //实例化对象
+                    //myinstance <- 地址空间
+                }
+            }
+        }
+        return myinstance;
+    }
+```
+
+#### 内存屏障
+
+1. 四种内存屏障
+   1. storestore 写写
+   2. storeload 写读
+   3. loadload 读读
+   4. loadstore 读写
 
 #### 问题
 
 1. 既然CPU有MESI缓存一致性协议，为什么JMM还需要volatile 关键字？
    1. 首先MESI的为了保证存在多级缓存的多核cpu或者多个cpu之间共享变量的一致性，（不能保证所有情况，还需要其他操作来继进行，针对不同的操作系统和架构有不同的解决方案），但是volatile关键字是高级语言给开发者提供的用来保证多个线程共享变量之间的可见性，屏蔽了底层操作系统的不同实现。
    2. 在JVM和底层操作系统系统进行交互式会将volatile关键字进行指令编译来达到开发者想要实现的目的。
-2. java内存模型抽象了不同系统的内存缓存机制，但是本事java的字节码还是需要编译为一个个指令交由操作系统执行，在这期间社怎么将java内存模型达到的缓存一致性通知给操作系统呢？
+2. java内存模型抽象了不同系统的内存缓存机制，但是本身java的字节码还是需要编译为一个个指令交由操作系统执行，在这期间社怎么将java内存模型达到的缓存一致性通知给操作系统呢？
 3. 指令重排是在什么情况下进行的：程序编译的时候进行，程序执行过程中遇到等待操作时进行？ 
