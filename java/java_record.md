@@ -180,8 +180,9 @@ public enum Size {
 3. ArrayList中elementData为什么被transient修饰？
    1. ArrayList在序列化的时候会调用writeObject，直接将size和element写入ObjectOutputStream；反序列化时调用readObject，从ObjectInputStream获取size和element，再恢复到elementData。
    2. 为什么不直接用elementData来序列化，而采用上诉的方式来实现序列化呢？原因在于elementData是一个缓存数组，它通常会预留一些容量，等容量不足时再扩充容量，那么有些空间可能就没有实际存储元素，采用上诉的方式来实现序列化时，就可以保证只序列化实际存储的那些元素，而不是整个数组，从而节省空间和时间
-   
 4. 底层实现
+   1. 扩容时使用 移位运算 >> 1 除 2 ,1 << 乘 2
+   2. 使用了引用类型，所以需要在移除元素或者清空数组的时候，将未被使用的区域置为null，不然 gc机制无法回收
 
 ### LinkedList
 
@@ -190,6 +191,7 @@ public enum Size {
 ### ArrayDeque
 
 1. 集成了List和Deque接口，是一个双端队列，可以用来实现栈和队列的操作，底层是一个循环数组。
+2. 具体使用要看看 push pop  和 getLast addLast操作的元素的位置
 
 ### HashMAp
 
