@@ -193,7 +193,34 @@ public enum Size {
 1. 集成了List和Deque接口，是一个双端队列，可以用来实现栈和队列的操作，底层是一个循环数组。
 2. 具体使用要看看 push pop  和 getLast addLast操作的元素的位置
 
-### HashMAp
+### HashMAp 原理讲解
+
+#### JDK7 HashMap ConcurrntHashMap
+
+1. 实现数据结构：数组+链表
+2. HashMap 插入节点的时候要判断key值是否已经存在，这里要产生遍历，为什么不使用尾插法，而要使用头插法？
+   1. 如果查找到，就直接覆盖原val
+   2. 如果没找到，就已经便利到尾部了，为什么不直接插入到尾部，而要使用头插法
+      1. 我们一般认为后插入的数据比较热，所以当遇到查询节点的时候可能会节省遍历查询对比的时间
+3. 初始化数组为什么要是 2 的幂次函数？
+   1. hashmap 进行数组下标运算的时候，采用的是 h & (lenth - 1)，这里lenth 是2的幂次方 可以满足 计算得到的数组下标 在（0-lenth）之间，并且满足平均分配。
+   2. 位操作比较快
+4. 为什么计算hashcode 时进行了很多的 位移操作？
+   1. 不进行位移操作的话 hashcode的高位无法参与到 计算数组下标的过程中
+5. 扩容操作
+6. modCount
+
+```java
+//自己实现HashMap的思路
+//给定一个数字 number，找到大于等于这个数的2的幂次数
+// 循环操作 从给定数字开始逐次加一 判断一下是否为 2 的幂次  
+Integer.highestOneBit( (number - 1) << 1 ); // 减一操作主要是为了满足 number 本身就是 2 的幂次
+Integer.highestOneBit( number )； //找到小于等于 number的幂次
+lenth - 1  0000 1111 进行与操作就是保留了hashcode 的后四位的结果
+
+```
+
+
 
 ## lambda 表达式
 
