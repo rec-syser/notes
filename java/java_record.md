@@ -207,7 +207,9 @@ public enum Size {
    2. 位操作比较快
 4. 为什么计算hashcode 时进行了很多的 位移操作？
    1. 不进行位移操作的话 hashcode的高位无法参与到 计算数组下标的过程中
-5. 扩容操作
+5. 扩容操作：
+   1. 扩容条件：size > threshold = 加载因子 * 现在数组的长度。table[bucketIndex] != null ?
+   2. 转移操作也是使用的头插法
 6. modCount
 
 ```java
