@@ -68,6 +68,8 @@
 
 2. 没有实现原子性，所以下面的代码还是无法保证多线程结果的准确。因为Volatile实现了内存的可见性，当一个线程最先改变变量的时候，变量状态变为（M），此时其他线程已经执行的++操作导致的变量结果的改变会变成无效的缓存，导致部分循环操作无效。
 
+3. 过多使用volatile关键会造成总线风暴，过多的监听总线信息
+
    ```java
    public class VolatileAtomicSample {
    
@@ -204,3 +206,51 @@ public class Singleton {
    2. 在JVM和底层操作系统系统进行交互式会将volatile关键字进行指令编译来达到开发者想要实现的目的。
 2. java内存模型抽象了不同系统的内存缓存机制，但是本身java的字节码还是需要编译为一个个指令交由操作系统执行，在这期间社怎么将java内存模型达到的缓存一致性通知给操作系统呢？
 3. 指令重排是在什么情况下进行的：程序编译的时候进行，程序执行过程中遇到等待操作时进行？ 
+
+### Synchronized
+
+1. 多个线程访问一个 共享的 可变的 资源情况，这种资源可能是：对象、变量、文件等 < -- 临界资源
+
+2. 锁的种类
+
+   1. 显式锁：ReentrantLock, 实现JUC里的Lock，实现是基于AQS实现，需要手动加锁和解锁
+   2. 隐式锁：Synchronized 加锁机制。 JVM内置锁，不需要手动加锁与解锁，JVM会自动加锁跟解锁
+
+   ![image-20200907221902874](java_concurrency.assets/image-20200907221902874.png)
+
+3. 加锁的目的：并发线程序列化的访问临界资源
+
+4. 加到方法上：
+
+   ```java
+   Class Bean{
+       //加到非静态方法上,，Bean是由容器管理的，这时 Bean 需要为单例模式
+       public Synchronized test{
+           
+       }
+       // 加到静态方法上，是加在了类上面
+       public static Synchronized test{
+           
+       }
+       
+       //夸对象加锁
+       public void test1(){
+       	UnsafeInstance.reflectGetUnsafe().monitorEntor(object);    
+       }
+       public void test2(){
+       	UnsafeInstance.reflectGetUnsafe().monitorExit(object);    
+       }
+   }
+   ```
+
+5. Synchronized 使用与原理
+
+   ![image-20200907224657841](java_concurrency.assets/image-20200907224657841.png)
+
+6. 是可重入锁，对同一个对象可以多次加锁
+
+#### 对象的内存结构
+
+![image-20200907234355329](java_concurrency.assets/image-20200907234355329.png)
+
+1. 实例对象内存中存储在哪？
