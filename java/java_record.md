@@ -198,18 +198,33 @@ public enum Size {
 #### JDK7 HashMap ConcurrntHashMap
 
 1. 实现数据结构：数组+链表
+
 2. HashMap 插入节点的时候要判断key值是否已经存在，这里要产生遍历，为什么不使用尾插法，而要使用头插法？
    1. 如果查找到，就直接覆盖原val
    2. 如果没找到，就已经便利到尾部了，为什么不直接插入到尾部，而要使用头插法
       1. 我们一般认为后插入的数据比较热，所以当遇到查询节点的时候可能会节省遍历查询对比的时间
+   
 3. 初始化数组为什么要是 2 的幂次函数？
    1. hashmap 进行数组下标运算的时候，采用的是 h & (lenth - 1)，这里lenth 是2的幂次方 可以满足 计算得到的数组下标 在（0-lenth）之间，并且满足平均分配。
    2. 位操作比较快
+   
 4. 为什么计算hashcode 时进行了很多的 位移操作？
+   
    1. 不进行位移操作的话 hashcode的高位无法参与到 计算数组下标的过程中
+   
 5. 扩容操作：
-   1. 扩容条件：size > threshold = 加载因子 * 现在数组的长度。table[bucketIndex] != null ?
-   2. 转移操作也是使用的头插法
+
+   1. 让每个table存储的链表变短，提高get效率。同时扩容之后，hash 索引会更改，所以要重新计算目标数组的索引
+   2. 扩容条件：size > threshold = 加载因子 * 现在数组的长度。table[bucketIndex] != null ?
+   3. 转移操作也是使用的头插法
+   4. 多线程会造成循环链表：第一 和 第二个线程 同时进入扩容模块的第一次循环，并且第二个线程卡住，第一个线程执行完毕扩容操作，第二个线程开始执行会出现。出现原因，next2指针和e2指针顺序颠倒了，并且扩容的时候使用的是头插法。
+
+   <img src="java_record.assets/image-20200909091419176.png" alt="image-20200909091419176" style="zoom:67%;" />
+
+   <img src="java_record.assets/image-20200909091443670.png" alt="image-20200909091443670" style="zoom:67%;" />
+
+   <img src="java_record.assets/image-20200909091748744.png" alt="image-20200909091748744" style="zoom:67%;" />
+
 6. modCount
 
 ```java
@@ -219,6 +234,8 @@ public enum Size {
 Integer.highestOneBit( (number - 1) << 1 ); // 减一操作主要是为了满足 number 本身就是 2 的幂次
 Integer.highestOneBit( number )； //找到小于等于 number的幂次
 lenth - 1  0000 1111 进行与操作就是保留了hashcode 的后四位的结果
+
+capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量超过我们的设定值之后，会重新给hash种子赋值，使得结果更加散列。接着数组扩容会进行rehash操作。
 
 ```
 
