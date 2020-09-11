@@ -227,6 +227,14 @@ public enum Size {
 
 6. modCount
 
+   1. hashmap不是线程安全的，提供modCount是为了在出现并发问题（一个遍历，一个修改）时，可以快速失败
+   2. 代表修改次数 在 add 和 remove 是会进行 modCount++
+   3. 下面的代码会报错，在调用key值迭代器遍历key时，如需删除 需要使用 key值迭代器的remove操作
+
+   <img src="java_record.assets/image-20200911095549666.png" alt="image-20200911095549666" style="zoom:67%;" />
+
+   <img src="java_record.assets/image-20200911095742859.png" alt="image-20200911095742859" style="zoom:67%;" />
+
 ```java
 //自己实现HashMap的思路
 //给定一个数字 number，找到大于等于这个数的2的幂次数
