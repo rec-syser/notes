@@ -264,7 +264,20 @@ public class Singleton {
 
 3. 锁的消除 ？
 
-4. 锁的状态是怎么转换的？
+4. 锁的状态是怎么转换的
 
-   
+## AQS 抽象队列同步器 
 
+ 定义
+
+![image-20200911232946384](java_concurrency.assets/image-20200911232946384.png)
+
+### 锁的几种形式
+
+1. state 变量  可重入锁 
+2. exclusiveOwnerThread 指向当前获得锁的线程， 独占锁
+3. CLH队列（同步队列）
+
+### 注意的点
+
+1. 如果Node在条件队列中，Node只能是独占模式，不能是共享模式 （BlockingQueue）?
