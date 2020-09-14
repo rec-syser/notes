@@ -195,7 +195,7 @@ public enum Size {
 
 ### HashMAp 原理讲解
 
-#### JDK7 HashMap ConcurrntHashMap
+#### JDK7 HashMap
 
 1. 实现数据结构：数组+链表
 
@@ -229,7 +229,7 @@ public enum Size {
 
    1. hashmap不是线程安全的，提供modCount是为了在出现并发问题（一个遍历，一个修改）时，可以快速失败
    2. 代表修改次数 在 add 和 remove 是会进行 modCount++
-   3. 下面的代码会报错，在调用key值迭代器遍历key时，如需删除 需要使用 key值迭代器的remove操作
+   3. 下面的代码会报错，在调用key值迭代器遍历key时，如需删除 需要使用 key值迭代器的remove操作，这里会同步迭代器的记录修改此处的变量
 
    <img src="java_record.assets/image-20200911095549666.png" alt="image-20200911095549666" style="zoom:67%;" />
 
@@ -247,7 +247,11 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 
 ```
 
+####  JDK ConcurrntHashMap
 
+1. Segment 分段， 每个Segment 里面存储 HashEntry数组
+2. 扩容先扩充每个Segment的 HashEntry 数组
+3. Unsafe 操作
 
 ## lambda 表达式
 
