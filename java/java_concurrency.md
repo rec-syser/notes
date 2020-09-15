@@ -272,11 +272,18 @@ public class Singleton {
 
 ![image-20200911232946384](java_concurrency.assets/image-20200911232946384.png)
 
-### 锁的几种形式
+### 锁的几种形式 
 
 1. state 变量  可重入锁 
 2. exclusiveOwnerThread 指向当前获得锁的线程， 独占锁
-3. CLH队列（同步队列）
+3. CLH队列（同步等待队列） 双向链表
+4. 条件队列 
+
+### 工具类
+
+#### Semaphore
+
+1. 应用场景：限流
 
 ### 注意的点
 

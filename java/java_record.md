@@ -37,6 +37,10 @@ public enum Size {
 }
 ```
 
+## lambda 表达式
+
+
+
 ## 注解 Annotation
 
 ### 什么是注解 、注解的作用 、在哪里使用注解
@@ -252,8 +256,6 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 1. Segment 分段， 每个Segment 里面存储 HashEntry数组
 2. 扩容先扩充每个Segment的 HashEntry 数组
 3. Unsafe 操作
-
-## lambda 表达式
-
-
+4. 计算Segment数组下标的时候为什么取高位计算
+5. tryLock()在获取不到锁的时候不会阻塞，而可以干一些其他的事情 lock()获取不到锁会阻塞
 
