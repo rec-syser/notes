@@ -7,3 +7,8 @@
 2. #### [数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) 用堆排做一下
 
 3. #### [路径总和](https://leetcode-cn.com/problems/path-sum/) 用非递归方式做一下
+
+4. #### [路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/) 明确是否以当前节点作为根节点 
+
+5. #### [另一个树的子树](https://leetcode-cn.com/problems/subtree-of-another-tree/) 思路和上题相似，这个题目的官方解答可以看一下 
+
