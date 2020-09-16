@@ -257,5 +257,6 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 2. 扩容先扩充每个Segment的 HashEntry 数组
 3. Unsafe 操作
 4. 计算Segment数组下标的时候为什么取高位计算
-5. tryLock()在获取不到锁的时候不会阻塞，而可以干一些其他的事情 lock()获取不到锁会阻塞
+5. tryLock()在获取不到锁的时候不会阻塞，而可以干一些其他的事情 在CMap里面的其他事情是去遍历了一下链表，并尝试创建了新节点
+6. lock()获取不到锁会阻塞
 
