@@ -263,9 +263,48 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 #### JDK8 HashMap
 
 1. 使用红黑树来维护元素
+
 2. 红黑树 为什么新插入的节点要着红色：红黑树中第五个性质规定，每个路径上的黑高度是相同的，如果新插入的节点着为黑色，就直接违反了红黑树的性质，而着为红色，如果其父节点是黑色的话仍然保持了红黑树的性质，不需要进行旋转操作来维护。
 
+3. 插入时比较：先比较hashcode，如果设置了 key的比较器 进行比较， 最后比较 System.identityHashCode
 
+4. 树化之前增加了双向链表，树化之后将树的根节点移动到双向链表的头结点（moveRootToFront）
 
+5. jdk在扩容钱先判断一下当前的桶是不是空的，如果是空的则不进行扩容，等到下次产生冲突时在进行扩容
 
+6. 扩容：
 
+   1. ```java
+      Node<K,V> loHead = null, loTail = null;
+      Node<K,V> hiHead = null, hiTail = null;
+      Node<K,V> next;
+      do {
+          next = e.next;
+          if ((e.hash & oldCap) == 0) { 
+              if (loTail == null)
+                  loHead = e;
+              else
+                  loTail.next = e;
+              loTail = e;
+          }
+          else {
+              if (hiTail == null)
+                  hiHead = e;
+              else
+                  hiTail.next = e;
+              hiTail = e;
+          }
+      } while ((e = next) != null);
+      if (loTail != null) {
+          loTail.next = null;
+          newTab[j] = loHead;
+      }
+      if (hiTail != null) {
+          hiTail.next = null;
+          newTab[j + oldCap] = hiHead;
+      } // 链表情况下 将一个桶上的一个链表分成两个，分别放到新数组的相应桶上
+      ```
+
+7. JDK8 ConcurrneHashMap
+
+   1. TreeBin 的作用 加锁更加方便 直接对整颗红黑树进行加锁，防止root节点改变之后其他线程错误上锁
