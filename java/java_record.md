@@ -270,7 +270,7 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 
 4. 树化之前增加了双向链表，树化之后将树的根节点移动到双向链表的头结点（moveRootToFront）
 
-5. jdk在扩容钱先判断一下当前的桶是不是空的，如果是空的则不进行扩容，等到下次产生冲突时在进行扩容
+5. jdk7 hashmap在扩容钱先判断一下当前的桶是不是空的，如果是空的则不进行扩容，等到下次产生冲突时在进行扩容
 
 6. 扩容：
 
@@ -308,3 +308,5 @@ capacity >= jdk.map.althashing.threshold // 设置环境变量，当数组容量
 7. JDK8 ConcurrneHashMap
 
    1. TreeBin 的作用 加锁更加方便 直接对整颗红黑树进行加锁，防止root节点改变之后其他线程错误上锁
+   
+8. 一个线程在扩容完成之后会判断新线程是否需要 扩容 （高并发场景）
