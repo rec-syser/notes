@@ -18,3 +18,7 @@
 
 8. #### [根据身高重建队列](https://leetcode-cn.com/problems/queue-reconstruction-by-height/) 重在思想
 
+9. #### [左叶子之和](https://leetcode-cn.com/problems/sum-of-left-leaves/) 使用广度优先遍历
+
+10. #### [最大子序和](https://leetcode-cn.com/problems/maximum-subarray/) 使用线段树求解 分治思想
+
