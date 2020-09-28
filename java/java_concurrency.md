@@ -287,6 +287,45 @@ public class Singleton {
 2. 非公平：直接进行资源申请，不管有没有排队
 3. 公平：如果有队列，则先排队
 
+#### ConuDownLaunch
+
+1. 使用场景：主线程多个任务去执行，所有任务执行完成之后 一块儿执行下面的共同任务
+2. 有主次之分
+
+#### CyclicBarrier
+
+1. 使用场景和CountDownLaunch相似，可以重复使用
+
+### Atomic 原子操作
+
+1. ABA问题 改变了又改变回来 A->B->A
+2. 解决办法：加版本号 AtomicStampedRerence
+   1. ![image-20200922223622049](java_concurrency.assets/image-20200922223622049.png)
+      1. CAS操作的变量 需要用 voltile关键字修饰吗？
+
+### Unsafe 魔术类
+
+ ### 阻塞队列 AQS条件的使用
+
+![image-20200922232954638](java_concurrency.assets/image-20200922232954638.png)
+
+#### ArrayBlockingQueue
+
+1. 生产者消费者模式。满足有 东西的 条件 消费者才能进行，满足东西不满的条件 生产者才能进行
+2. 阻塞队列的源码没有看
+
 ### 注意的点
 
 1. 如果Node在条件队列中，Node只能是独占模式，不能是共享模式 （BlockingQueue）?
+
+
+
+## 线程池
+
+1. 适用于 单个任务时间比较短， 需要处理的任务数量大
+2. 优势：重用存在的线程，减少线程创建、消亡的开销，提高性能
+3. 非核心线程 使用完会被回收
+
+### 线程池的五种状态
+
+![image-20200925221429222](java_concurrency.assets/image-20200925221429222.png)
