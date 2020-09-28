@@ -22,3 +22,13 @@
 
 10. #### [最大子序和](https://leetcode-cn.com/problems/maximum-subarray/) 使用线段树求解 分治思想
 
+11. #### [打家劫舍 III](https://leetcode-cn.com/problems/house-robber-iii/)  [路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/) 考虑是否使用根节点 间隔遍历
+
+12. #### [二叉树中第二小的节点](https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree/) 重新做
+
+13. #### [二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 莫里斯遍历
+
+14. #### [x 的平方根](https://leetcode-cn.com/problems/sqrtx/) 左中位数 右中位数 移位运算符的优先级（从左往右计算）小于加法  牛顿法 二分法的细节（算法小抄）
+
+    1. 牛顿法思路：
+
